@@ -25,7 +25,13 @@ app = FastAPI(
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL, "http://localhost:5173"],
+    allow_origins=[
+        settings.FRONTEND_URL,  # Vercel
+        "http://localhost:5173",  # Local
+        "https://*.lovable.app",  # Lovable preview
+        "https://*.lovable.dev",  # Lovable dev
+        "*"  # TEMPORARIAMENTE aceitar tudo
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
