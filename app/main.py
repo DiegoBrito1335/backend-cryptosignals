@@ -4,8 +4,8 @@ from app.config import settings
 from app.services.binance_service import binance_service
 from app.services.technical_analysis import technical_analysis
 from app.services.signal_generator import signal_generator
-from app.api import signals, history, stats
-#from app.database import engine, Base
+from app.api import signals, history, stats, auth
+from app.database import engine, Base
 
 # Importar rotas (vamos criar depois)
 # app.include_router(signals.router, prefix="/api/signals", tags=["signals"])
@@ -13,7 +13,7 @@ from app.api import signals, history, stats
 # app.include_router(stats.router, prefix="/api/stats", tags=["stats"])
 
 # Criar tabelas
-#Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 # Criar app
 app = FastAPI(
@@ -161,6 +161,7 @@ def health_check():
 
 # Importar rotas (vamos criar depois)
 
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(signals.router, prefix="/api/signals", tags=["signals"])
 app.include_router(history.router, prefix="/api/history", tags=["history"])
 app.include_router(stats.router, prefix="/api/stats", tags=["stats"])
