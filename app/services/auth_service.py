@@ -1,21 +1,23 @@
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 from app.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Usar Argon2 ao invés de bcrypt (mais moderno e sem limite de 72 bytes)
+ph = PasswordHasher()
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verificar senha - truncar para 72 bytes"""
-    if len(plain_password) > 72:
-        plain_password = plain_password[:72]
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verificar senha com Argon2"""
+    try:
+        ph.verify(hashed_password, plain_password)
+        return True
+    except VerifyMismatchError:
+        return False
 
 def get_password_hash(password: str) -> str:
-    """Hash da senha - truncar para 72 bytes"""
-    if len(password) > 72:
-        password = password[:72]
-    return pwd_context.hash(password)
+    """Hash da senha com Argon2"""
+    return ph.hash(password)
 
 def create_access_token(data: dict) -> str:
     """Criar token JWT"""
