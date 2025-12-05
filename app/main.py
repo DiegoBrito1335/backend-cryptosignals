@@ -147,6 +147,13 @@ def test_generate_signals_top10(timeframe: str = "1h"):
         "signals": signals
     }
 
-
+# CORS - PERMITIR TUDO TEMPORARIAMENTE PARA DEBUG
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # PERMITIR TUDO temporariamente
+    allow_credentials=False,  # IMPORTANTE: False quando usa *
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
